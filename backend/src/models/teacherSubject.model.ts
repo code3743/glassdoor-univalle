@@ -4,7 +4,7 @@ import Teacher from './teacher.model';
 import Subject from './subject.model';
 
 class TeacherSubject extends Model {
-  public id!: string;
+  public id!: number;
   public teacher_id!: string;
   public subject_id!: string;
 }
@@ -12,7 +12,8 @@ class TeacherSubject extends Model {
 TeacherSubject.init(
   {
     id: {
-      type: DataTypes.STRING(14),
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     teacher_id: {
