@@ -4,7 +4,6 @@ import Student from './student.model';
 import TeacherSubject from './teacherSubject.model';
 import Rating from './rating.model';
 
-// Relaciones
 Teacher.hasMany(TeacherSubject, { foreignKey: 'teacher_id' });
 Subject.hasMany(TeacherSubject, { foreignKey: 'subject_id' });
 
