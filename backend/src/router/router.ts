@@ -4,6 +4,7 @@ import { getAllTeachers, getCurrentTeachers, getTeacherById} from "../controller
 import { getRatingsByTeacherSubjectId, getRatingsSummary } from "../controllers/ratings.controller";
 import { getAllSubjects, getSubjectById } from "../controllers/subjects.controller";
 import { evaluateTeacher, getTeacherToEvaluate } from "../controllers/evaluate.teacher.controller";
+import { search } from "../controllers/search.controller";
 
 
 
@@ -20,7 +21,7 @@ router.get('/ratings', getRatingsSummary);
 router.get('/ratings/:teacherSubjectId', getRatingsByTeacherSubjectId);
 router.get('/evaluate-teacher', getTeacherToEvaluate);
 router.post('/evaluate-teacher', evaluateTeacher)
-router.get('/search');
+router.get('/search', search);
 
 
 

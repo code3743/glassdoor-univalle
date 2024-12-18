@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(tokenMiddleware)
 app.use('/api', router);
 app.get('*', (req, res) => { 
