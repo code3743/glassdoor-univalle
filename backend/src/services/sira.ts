@@ -123,3 +123,4 @@ class SiraServiceException extends Error {
 
 
 export { authSira, teacherHistory };
+export default SiraServiceException;
