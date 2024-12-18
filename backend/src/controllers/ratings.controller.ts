@@ -3,16 +3,15 @@ import { Request, Response } from 'express';
 import sequelize from '../config/db.config';
 
 interface RatingsSummary  extends Rating { 
-    teacher_subject_id: number;
     total_ratings: number;
     average_rating: number;
 }
 
 interface TeacherSubjectWithRelations extends TeacherSubject {
-    Teacher: Teacher | null;
-    Subject: Subject | null;
-}
-
+    'Teacher.name': string | null;
+    'Subject.name': String | null;
+  }
+  
 export const getRatingsSummary = async (req: Request, res: Response) => {
     try {
         const page = parseInt(req.query.page as string) || 1;
@@ -63,8 +62,7 @@ export const getRatingsSummary = async (req: Request, res: Response) => {
                 const summary = ratingsSummary.find((rs) => rs.teacher_subject_id === ts.id) as RatingsSummary;
                 return {
                     id: ts.id,
-                    teacher_name: ts.Teacher?.name || 'Unknown',
-                    subject_name: ts.Subject?.name || 'Unknown',
+                    teacher_name: ts['Teacher.name'],
                     total_ratings: summary.total_ratings,
                     average_rating: summary.average_rating,
                 }
@@ -123,8 +121,8 @@ export const getRatingsByTeacherSubjectId = async (req: Request, res: Response) 
         });
 
         res.status(200).json({
-            teacher_name: teacherSubject.Teacher?.name || 'Unknown',
-            subject_name: teacherSubject.Subject?.name || 'Unknown',
+            teacher_name: teacherSubject['Teacher.name'],
+            subject_name: teacherSubject['Subject.name'],
             ratings: ratings.map((r) => {
                 return {
                     rating: r.rating,
