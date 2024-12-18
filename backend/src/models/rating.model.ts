@@ -1,12 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/db.config';
-import Teacher from './teacher.model';
 import Student from './student.model';
+import TeacherSubject from './teacherSubject.model';
 
 class Rating extends Model {
-  public id!: string;
-  public teacher_id!: string;
+  public id!: number;
   public student_id!: string;
+  public teacher_subject_id!: number;
   public rating!: number;
   public comment!: string;
   public created_at!: Date;
@@ -15,21 +15,22 @@ class Rating extends Model {
 Rating.init(
   {
     id: {
-      type: DataTypes.STRING(14),
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
-    },
-    teacher_id: {
-      type: DataTypes.STRING(14),
-      references: {
-        model: Teacher,
-        key: 'id',
-      },
-      allowNull: false,
     },
     student_id: {
       type: DataTypes.STRING(14),
       references: {
         model: Student,
+        key: 'id',
+      },
+      allowNull: false,
+    },
+    teacher_subject_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: TeacherSubject,
         key: 'id',
       },
       allowNull: false,
