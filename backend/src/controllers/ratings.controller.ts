@@ -63,6 +63,7 @@ export const getRatingsSummary = async (req: Request, res: Response) => {
                 return {
                     id: ts.id,
                     teacher_name: ts['Teacher.name'],
+                    subject_name: ts['Subject.name'],
                     total_ratings: summary.total_ratings,
                     average_rating: summary.average_rating,
                 }
