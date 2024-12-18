@@ -2,10 +2,13 @@ import { Request, Response } from "express";
 import { teacherHistory } from "../services/sira";
 import { Rating, Subject, Teacher, TeacherSubject } from "../models";
 
+
+
 interface TeacherSubjectWithRelations extends TeacherSubject {
-  Teacher: Teacher | null;
-  Subject: Subject | null;
+  'Teacher.name': string | null;
+  'Subject.name': String | null;
 }
+
 
 export const getTeacherToEvaluate = async (
   req: Request & { user?: string; session?: string }, res: Response) => {
@@ -53,8 +56,8 @@ export const getTeacherToEvaluate = async (
     res.json({
       teachers: teacherSubject.map((ts) => {
         return {
-          teacher_name: ts.Teacher?.name || "Unknown",
-          subject_name: ts.Subject?.name || "Unknown",
+          teacher_name: ts["Teacher.name"],
+          subject_name: ts["Subject.name"],
           rated: rating.some((r) => r.teacher_subject_id === ts.id),
         };
       }),
