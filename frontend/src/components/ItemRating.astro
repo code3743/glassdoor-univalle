@@ -1,0 +1,40 @@
+---
+interface Props {
+    id: number;
+    name: string;
+    subject: string;
+    rating: number;
+    total: number;
+}
+
+const {id, name, subject, rating, total} = Astro.props;
+
+let ratingImagePath = `unknown.png`;
+if (rating > 3.7) {
+    ratingImagePath = `good.png`;
+} else if (rating > 2.5) {
+    ratingImagePath = `normal.png`;
+} else if (rating > 0) {
+    ratingImagePath = `bad.png`;
+}
+---
+
+<article class="flex">
+    <div  class="mb-2 xl:mb-0 transition hover:scale-110">
+        <img
+            transition:name={`img-${id}`}
+            class="mr-5 w-48 rounded"
+            src={`/${ratingImagePath}`}
+            alt="Imagen que representa la calificación del profesor"
+        />
+    </div>
+    
+    <a class="flex flex-col justify-center" href={`/rantigs/${id}`}>
+        <h2 transition:name={`title-${id}`} class="mb-2 text-2xl font-bold leading-tight text-white hover:text-[#EE322F]">
+            {name}
+        </h2>
+
+        <p class="mb-4 text-gray-300 max-w-sm">{subject}</p>
+        <span class="text-xs">⭐️ {rating} ({total} reseñas)</span>
+    </a>
+</article>
