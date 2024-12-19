@@ -1,4 +1,4 @@
-import { Rating, TeacherSubject, Teacher, Subject } from '../models';
+import { Rating, TeacherSubject, Teacher, Subject, Student } from '../models';
 import { Request, Response } from 'express';
 import sequelize from '../config/db.config';
 
@@ -10,7 +10,13 @@ interface RatingsSummary  extends Rating {
 interface TeacherSubjectWithRelations extends TeacherSubject {
     'Teacher.name': string | null;
     'Subject.name': String | null;
-  }
+}
+
+
+interface RatingStudentWithRelations extends Rating {
+    'Student.name': string | null;
+}
+
   
 export const getRatingsSummary = async (req: Request, res: Response) => {
     try {
@@ -116,18 +122,39 @@ export const getRatingsByTeacherSubjectId = async (req: Request, res: Response) 
 
         const ratings = await Rating.findAll({
             where: { teacher_subject_id: teacherSubjectId },
+            include: [
+                {
+                    model: Student,
+                    attributes: ['name'],
+                    required: true,
+                }
+            ],
             limit,
             offset,
             raw: true,
-        });
+        }) as RatingStudentWithRelations[];
+
+        const average = await Rating.findAll({
+            where: { teacher_subject_id: teacherSubjectId },
+            group: ['teacher_subject_id'],
+            attributes: ['teacher_subject_id', [sequelize.fn('AVG', sequelize.col('rating')), 'average_rating'], [sequelize.fn('COUNT', sequelize.col('id')), 'total_ratings']],
+            raw: true
+        }) as RatingsSummary[];
+
+        console.log(average);   
 
         res.status(200).json({
+            id: teacherSubject.id,
+            average_rating: average.length ? average[0].average_rating : 0,
+            total_ratings: average.length ? average[0].total_ratings : 0,
             teacher_name: teacherSubject['Teacher.name'],
             subject_name: teacherSubject['Subject.name'],
             ratings: ratings.map((r) => {
                 return {
+                    user_name: r['Student.name'],
                     rating: r.rating,
                     comment: r.comment,
+                    created_at: r.created_at,
                 }
             })
         });
