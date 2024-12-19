@@ -1,0 +1,49 @@
+---
+interface Props {
+    description?: string;
+}
+const dataImage = [
+    {
+        path: "/unknown.png",
+        alt: "Imagen que representa un estado desconocido",
+        title: "Desconocida",
+    },
+    {
+        path: "/good.png",
+        alt: "Imagen que representa un estado bueno",
+        title: "Buena",
+    },
+    {
+        path: "/normal.png",
+        alt: "Imagen que representa un estado normal",
+        title: "Normal",
+    },
+    {
+        path: "/bad.png",
+        alt: "Imagen que representa un estado malo",
+        title: "Mala",
+    }
+]
+
+const { description } = Astro.props;
+---
+<section class="text-center mx-auto md:w-11/12 flex flex-col items-center justify-center px-4">
+    <p class="text-lg mb-8">
+      {description ? description : "Otros estudiantes como tú ya calificaron a sus profes. ¡Revisa sus opiniones y elige tus clases con confianza! 🎓📚"}
+    </p>
+    <article class="grid gap-4 justify-center sm:grid-cols-2 lg:grid-cols-4">
+        {
+            dataImage.map(({ path, alt, title }) => (
+                <div class="rounded mx-2 transition hover:scale-110 flex items-center flex-col justify-center">
+                    <img
+                        class="h-48 aspect-square w-48"
+                        src={path}
+                        alt={alt}
+                    />
+                    <h3 class="text-white text-xl font-semibold pt-1 leading-none text-center">{title}</h3>
+                </div>
+            ))
+        }
+    </article>
+</section>
+
