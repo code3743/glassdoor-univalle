@@ -80,6 +80,7 @@ export const search = async (req: Request, res: Response) => {
         const result = teacherSubject.map(ts => {
             const rating = ratings.find(r => r.teacher_subject_id === ts.id);
             return {
+                id: ts.id,
                 teacher_name: ts['Teacher.name'],
                 subject_name: ts['Subject.name'],
                 total_ratings: rating?.total_ratings || 0,
