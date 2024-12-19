@@ -1,0 +1,52 @@
+---
+interface SearchResult {
+    id: number;
+    teacher_name: string;
+    subject_name: string;
+    total_rating: number;
+    average_rating: number;
+}
+
+import Introduction from "../components/Introduction.astro";
+import ItemRating from "../components/ItemRating.astro";
+import Searcher from "../components/Searcher.astro";
+import ENDPOINTS from "../config/config";
+import Layout from "../layouts/Layout.astro";
+const q = Astro.url.searchParams.get('q') || '';
+const response = await fetch(ENDPOINTS.SEARCH(q));
+const data = await response.json();
+const results: SearchResult[] = data.teachers || [];
+---
+
+
+<Layout title="Glassdor Univalle" description="Busca la calificación que tienen los profesores">
+
+    <main>
+        <a href="/">
+        <h1 class="text-center text-6xl font-extrabold mb-24"> Glassdoor
+            <span class="block">Univalle</span>
+        </h1>
+    </a>
+		<Searcher initialQuery={q}/>
+    </main>
+    <section aria-label="Reseñas recientes" class="mt-24">
+		<div class="px-4 mx-auto max-w-screen-xl">
+      {!results.length ? <Introduction description="¡Ups! No encontramos nada para tu búsqueda. ¿Por qué no pruebas con otro profe? 🚀"/> :
+			
+                <h3 class="my-4 " >
+                    Resultados de la busqueda: <span class="text-[#EE322F] font-semibold ml-1">{q?.toLocaleUpperCase()}</span>
+                </h3>
+            <div class="grid gap-6 md:grid-cols-2">
+                {
+					
+					results.map(result => {
+						
+						const { id, teacher_name, subject_name, total_rating, average_rating,  } = result;
+						return  <ItemRating id={id}  name={teacher_name} subject={subject_name} total={total_rating}  rating={average_rating} />  
+					})
+				}
+			</div>
+      }
+		</div>
+	</section>
+</Layout>
