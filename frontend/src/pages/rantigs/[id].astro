@@ -11,7 +11,6 @@ interface Teacher {
 interface Rating {
     rating: number;
     comment: string;
-    user_name: string;
     created_at: string;
 }
 
@@ -55,18 +54,16 @@ if (average_rating > 3.7) {
           <a href='/' class="hover:underline opacity-70">← Volver atrás</a>
           <img transition:name={`img-${id}`} class="rounded w-72 h-auto" src={`/${ratingImagePath}`} alt="Imagen que representa un estado respecto a la calificación" />
           
-          <span class="text-xs">⭐️ {average_rating} ({total_ratings} reseñas)</span>
+          <span class="text-xs">⭐️ {parseFloat(average_rating+'').toFixed(2)} ({total_ratings} reseñas)</span>
         </aside>
     
         <main class="max-w-3xl">
           <h1 transition:name={`title-${id}`} class="text-4xl font-bold mb-4">{teacher_name}</h1>
           <p class="text-[#EE322F] text-lg font-medium mb-4">{subject_name}</p>
-        <!-- Crear comentario nombre de usaurio, fecha de calificaicon, calificacion y comentario -->
         <section class="flex items-center gap-4">
             {
-                ratings.map(({ rating, comment, user_name }, index) => (
+                ratings.map(({ rating, comment}, index) => (
                     <article class="bg-gray-800 p-4 rounded">
-                        <h3 class="text-[#EE322F] text-lg font-medium">{user_name}</h3>
                         <p class="text-gray-300 text-sm mb-2">Calificación: {rating}</p>
                         <p class="text-gray-300 text-sm">{comment}</p>
                     </article>

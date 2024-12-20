@@ -1,0 +1,201 @@
+---
+interface Teacher {
+    teacher_name: string;
+    subject_name: string;
+    rating: number;
+    average_rating: number
+    total_ratings: number;
+    ratings: Rating[];
+}
+
+interface Rating {
+    rating: number;
+    comment: string;
+    created_at: string;
+}
+
+import ENDPOINTS from "../../config/config";
+import Layout from "../../layouts/Layout.astro";
+
+
+const token = Astro.locals.token;
+const user = Astro.locals.user;
+
+if (!token || !user) {
+    return Astro.redirect('/login');
+}
+
+if (user && !user.name) {
+    return Astro.redirect('/profile');
+}
+
+
+const { id } = Astro.params
+
+const response = await fetch(ENDPOINTS.RATINGS_BY_TEACHER_SUBJECT_ID(parseInt(id || '')));
+
+
+if (!response.ok) {
+    return new Response(
+        null,
+        {
+            status: 404,
+            statusText: response.statusText,
+            
+        },
+    )
+}
+
+const data = await response.json() as Teacher;
+const { teacher_name, subject_name, total_ratings, average_rating, ratings } = data;
+
+const parseAverageRating = parseFloat(average_rating.toString()).toFixed(1);
+let ratingImagePath = `unknown.png`;
+if (average_rating > 3.7) {
+    ratingImagePath = `good.png`;
+} else if (average_rating > 2.5) {
+    ratingImagePath = `normal.png`;
+} else if (average_rating > 0) {
+    ratingImagePath = `bad.png`;
+}
+---
+
+<Layout title="Evaluacion al docente" description="Deja tu reseña">
+    <div id="overlay">
+        <div id="spinner"></div>
+      </div>
+    <div class="flex gap-12">
+        <aside class="flex flex-col items-center gap-4">
+          <a href='/evaluation' class="hover:underline opacity-70">← Volver atrás</a>
+          <img transition:name={`img-${id}`} class="rounded w-72 h-auto" src={`/${ratingImagePath}`} alt="Imagen que representa un estado respecto a la calificación" />
+          
+          <span class="text-xs">⭐️ {parseAverageRating } ({total_ratings} reseñas)</span>
+
+          <form id="rating-form" class="flex flex-col gap-4 w-full max-w-sm" action="/api/evaluation" method="POST">
+            <input 
+                type="hidden" 
+                name="teacher_id" 
+                value={id} 
+                required
+            />
+            <textarea 
+                name="comment" 
+                maxlength="255" 
+                class="p-2 border rounded resize-none w-full h-32 bg-gray-900 text-white placeholder-gray-400" 
+                placeholder="Escribe tu comentario aquí..."
+                required></textarea>
+            
+            <div class="flex items-center gap-2">
+                <label for="rating" class="text-white">Puntaje:</label>
+                <select 
+                    id="rating" 
+                    name="rating" 
+                    class="p-2 border rounded bg-gray-900 text-white"
+                    required>
+                    <option value="">Selecciona</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <button 
+                type="submit" 
+                class="py-2 px-4 bg-[#EE322F] text-white rounded hover:bg-[#D12B28]">
+                Enviar reseña
+            </button>
+        </form>
+        </aside>
+    
+        <main class="max-w-3xl">
+          <h1 transition:name={`title-${id}`} class="text-4xl font-bold mb-4">{teacher_name}</h1>
+          <p class="text-[#EE322F] text-lg font-medium mb-4">{subject_name}</p>
+        <section class="flex items-center gap-4">
+            {
+                ratings.map(({ rating, comment, created_at}, index) => (
+                    <article class="bg-gray-800 p-4 rounded">
+                        <p class="text-gray-300 text-sm mb-2">Calificación: {rating.toFixed()}</p>
+                        <p class="text-gray-300 text-sm">{comment}</p>
+                        <p class="text-gray-300 text-sm">{created_at}</p>
+                    </article>
+                ))
+            }
+        </main>
+      </div>
+    
+</Layout>
+
+
+<style>
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8); 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999; 
+        opacity: 0; 
+        visibility: hidden;
+        transition: opacity 0.5s ease, visibility 0.5s ease; 
+    }
+    #overlay.active {
+        opacity: 1;
+        visibility: visible; 
+    }
+  </style>
+  
+  
+  <script>
+        import { navigate } from 'astro:transitions/client';
+        import { Spinner } from 'spin.js';
+  
+        const overlay = document.getElementById('overlay')!;
+        const target = document.getElementById('spinner')!;
+          
+        
+        const spinner = new Spinner({
+              color: '#000',
+              lines: 12, 
+             
+          });
+  
+        
+        function showSpinner() {
+            overlay.classList.add('active');
+            spinner.spin(target);
+        }
+  
+        function hideSpinner() {
+            overlay.classList.remove('active');
+            spinner.stop();
+        }
+  
+        const form = document.querySelector('form')!;
+  
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            showSpinner();
+
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+            }); 
+  
+            const data = await response.json();
+            console.log(data);
+            hideSpinner();
+            if(response.ok){
+              return await navigate('/evaluation');
+            }
+            alert('Ha ocurrido un error: ' + data.message);
+        });
+  
+  
+  </script>

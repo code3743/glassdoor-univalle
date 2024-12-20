@@ -2,6 +2,8 @@ export const API_BASE_URL = import.meta.env.API_BASE_URL;
 
 const ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/login`,
+  LOGOUT: `${API_BASE_URL}/logout`,
+  USER: `${API_BASE_URL}/user`,
   UPDATE_USER: `${API_BASE_URL}/update`,
   CURRENT_TEACHERS: `${API_BASE_URL}/current-teachers`,
   TEACHERS: `${API_BASE_URL}/teachers`,

@@ -10,9 +10,9 @@ interface Rating {
 import Introduction from '../components/Introduction.astro';
 import ItemRating from '../components/ItemRating.astro';
 import Searcher from '../components/Searcher.astro';
+import UserInfo from '../components/UserInfo.astro';
 import ENDPOINTS from '../config/config';
 import Layout from '../layouts/Layout.astro';
-
 
 const response = await fetch(ENDPOINTS.RATINGS);
 const data = await response.json();
@@ -24,7 +24,16 @@ const ratings: Rating[] = data.data || [];
         <h1 class="text-center text-6xl font-extrabold mb-24"> Glassdoor
             <span class="block">Univalle</span>
         </h1>
-		    <Searcher/>
+
+
+			<UserInfo/>
+	
+
+
+
+		<Searcher/>
+
+		
     </main>
 
 	
