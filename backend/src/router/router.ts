@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { signinController, updateUserController } from "../controllers/user.controller";
+import { getUserController, signinController, signoutController, updateUserController } from "../controllers/user.controller";
 import { getAllTeachers, getCurrentTeachers, getTeacherById} from "../controllers/teachers.controller";
 import { getRatingsByTeacherSubjectId, getRatingsSummary } from "../controllers/ratings.controller";
 import { getAllSubjects, getSubjectById } from "../controllers/subjects.controller";
@@ -11,6 +11,8 @@ import { search } from "../controllers/search.controller";
 const router = Router();
 
 router.post('/login', signinController);
+router.get('/logout', signoutController);
+router.get('/user', getUserController);
 router.post('/update', updateUserController);
 router.get('/current-teachers', getCurrentTeachers);
 router.get('/teachers', getAllTeachers);
