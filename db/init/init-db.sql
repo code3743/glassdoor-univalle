@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS subjects (
 
 CREATE TABLE IF NOT EXISTS students (
   id VARCHAR(14) PRIMARY KEY,
-  name TEXT NOT NULL
+  name TEXT
 );
 
 CREATE TABLE IF NOT EXISTS teacher_subject (
