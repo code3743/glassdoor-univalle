@@ -37,9 +37,9 @@ const authSira = async (code: string, password: string) => {
     const html = iconv.decode(response.data, "ISO-8859-1");
     const $ = cheerio.load(html);
     
-    if ( $("script").text().includes("alert")) {
-        const error = $("script").text().split("alert('")[1].split("');")[0];
-      throw new SiraServiceException(error);
+    if ( $("script").text().includes("alert")) {    
+        const error = $("script").text().match(/alert\s*\(\s*\'\s*(.*?)\s*\'\s*\)/);
+      throw new SiraServiceException(error ? error[0] : "Error al autenticar");
     }
     const cookies = jar.getCookiesSync(sira.baseUrl);
     const session = cookies.filter((cookie) => cookie.key === "PHPSESSID")[0]

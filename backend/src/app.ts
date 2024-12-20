@@ -2,6 +2,7 @@ import express from "express";
 import router from "./router/router";
 import sequelize from "./config/db.config";
 import { tokenMiddleware } from "./middlewares/token.middleware";
+import cors from "cors";
 
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(tokenMiddleware)
 app.use('/api', router);
+app.use(cors())
 app.get('*', (req, res) => { 
     res.status(404).json({ message: 'Not found' });
 });
