@@ -21,7 +21,7 @@ export const getTeacherToEvaluate = async (
     const currentTeachers = await teacherHistory(req.session);
     const teacherSubject: TeacherSubjectWithRelations[] = [];
     for (const teacher of currentTeachers) {
-      const teacherSubjectDB = (await TeacherSubject.findOne({
+      const teacherSubjectDB = await TeacherSubject.findOne({
         where: { teacher_id: teacher.id, subject_id: teacher.codeSubject },
         include: [
           {
@@ -36,7 +36,7 @@ export const getTeacherToEvaluate = async (
           },
         ],
         raw: true,
-      })) as TeacherSubjectWithRelations;
+      }) as TeacherSubjectWithRelations;
       if (!teacherSubjectDB) {
         res.status(404).json({ message: "Teacher not found" });
         return;
@@ -46,23 +46,25 @@ export const getTeacherToEvaluate = async (
 
     const rating = await Rating.findAll({
       where: {
-        teacher_subject_id: teacherSubject.map((ts) => ts.subject_id),
+        teacher_subject_id: teacherSubject.map((ts) => ts.id),
         student_id: req.user,
       },
-      attributes: ["teacher_subject_id"],
+      attributes: ["teacher_subject_id", "rating", "comment"],
       raw: true,
     });
 
     res.json({
       teachers: teacherSubject.map((ts) => {
         return {
-          teacher_name: ts["Teacher.name"],
-          subject_name: ts["Subject.name"],
+          id: ts.id,
+          name: ts["Teacher.name"],
+          subject: ts["Subject.name"],
           rated: rating.some((r) => r.teacher_subject_id === ts.id),
         };
       }),
     });
   } catch (error) {
+    console.error("Error getting teachers to evaluate:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -70,7 +72,8 @@ export const getTeacherToEvaluate = async (
 
 export const evaluateTeacher = async (req: Request & { user?: string }, res: Response) => {
     try {
-        
+        console.log(req.user);
+        console.log(req.body);
         if (!req.user) {
             res.status(401).json({ message: 'Unauthorized' });
             return;
@@ -101,9 +104,10 @@ export const evaluateTeacher = async (req: Request & { user?: string }, res: Res
         } 
 
         await Rating.create({ student_id: req.user, teacher_subject_id, rating, comment });
-       
+        
         res.json({ message: 'Rating created' });
     } catch (error) {
+       
         res.status(500).json({ message: 'Internal server error' });
     }
 };
