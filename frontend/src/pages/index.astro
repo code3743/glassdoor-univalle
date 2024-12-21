@@ -1,58 +1,71 @@
 ---
 interface Rating {
-	id: number;
-	teacher_name: string;
-	subject_name: string;
-	total_rating: number;
-	average_rating: number;
+  id: number;
+  teacher_name: string;
+  subject_name: string;
+  total_rating: number;
+  average_rating: number;
 }
 
-import Introduction from '../components/Introduction.astro';
-import ItemRating from '../components/ItemRating.astro';
-import Searcher from '../components/Searcher.astro';
-import UserInfo from '../components/UserInfo.astro';
-import ENDPOINTS from '../config/config';
-import Layout from '../layouts/Layout.astro';
-
-const response = await fetch(ENDPOINTS.RATINGS);
-const data = await response.json();
-const ratings: Rating[] = data.data || [];
+import Introduction from "../components/Introduction.astro";
+import ItemRating from "../components/ItemRating.astro";
+import Searcher from "../components/Searcher.astro";
+import UserInfo from "../components/UserInfo.astro";
+import ENDPOINTS from "../config/config";
+import Layout from "../layouts/Layout.astro";
+let data: any;
+try {
+  console.log("Fetching data...");
+  console.log(ENDPOINTS.RATINGS);
+  const response = await fetch(ENDPOINTS.RATINGS);
+  data = await response.json();
+} catch (error) {
+  console.error("Error:", error);
+}
+const ratings: Rating[] = data?.data || [];
 ---
 
-<Layout title="Glassdoor Univalle" description="Glassdor Univalle es una plataforma de reseñas de profesores de la Universidad del Valle">
-	  <main>
-        <h1 class="text-center text-6xl font-extrabold mb-24"> Glassdoor
-            <span class="block">Univalle</span>
-        </h1>
+<Layout
+  title="Glassdoor Univalle"
+  description="Glassdor Univalle es una plataforma de reseñas de profesores de la Universidad del Valle"
+>
+  <main>
+    <h1 class="text-center text-6xl font-extrabold mb-24">
+      Glassdoor
+      <span class="block">Univalle</span>
+    </h1>
+    <UserInfo />
+    <Searcher />
+  </main>
 
-
-			<UserInfo/>
-	
-
-
-
-		<Searcher/>
-
-		
-    </main>
-
-	
-
-	<section aria-label="Reseñas recientes" class="mt-24">
-		<div class="px-4 mx-auto max-w-screen-xl">
-      {!ratings.length ? <Introduction description='Aún no hay reseñas por aquí, pero no te quedes fuera. ¡Inicia sesión y califica a los profes que tuviste este semestre! 📝📚'/> :
-			<div class="grid gap-6 md:grid-cols-2">
-				{
-					
-					ratings.map(rating => {
-						
-						const { id, teacher_name, subject_name, total_rating, average_rating,  } = rating;
-						return  <ItemRating id={id}  name={teacher_name} subject={subject_name} total={total_rating}  rating={average_rating} />  
-					})
-				}
-			</div>
+  <section aria-label="Reseñas recientes" class="mt-24">
+    <div class="px-4 mx-auto max-w-screen-xl">
+      {
+        !ratings.length ? (
+          <Introduction description="Aún no hay reseñas por aquí, pero no te quedes fuera. ¡Inicia sesión y califica a los profes que tuviste este semestre! 📝📚" />
+        ) : (
+          <div class="grid gap-6 md:grid-cols-2">
+            {ratings.map((rating) => {
+              const {
+                id,
+                teacher_name,
+                subject_name,
+                total_rating,
+                average_rating,
+              } = rating;
+              return (
+                <ItemRating
+                  id={id}
+                  name={teacher_name}
+                  subject={subject_name}
+                  total={total_rating}
+                  rating={average_rating}
+                />
+              );
+            })}
+          </div>
+        )
       }
-		</div>
-	</section>
-
+    </div>
+  </section>
 </Layout>
