@@ -82,7 +82,6 @@ services:
       DATABASE_URL: postgres://admin:admin_password@postgres:5432/glassdoor_db
     networks:
       - backend_network
-
   frontend:
     image: node:20.16
     container_name: frontend_app
@@ -95,9 +94,10 @@ services:
       HOST: 0.0.0.0
     volumes:
       - ./frontend:/app
+    working_dir: /app
     depends_on:
       - backend
-    command: /bin/bash -c "npm install && npm run build &&  node dist/server/entry.mjs"
+    command: /bin/bash -c "npm install && npm run build && node dist/server/entry.mjs"
     networks:
       - backend_network
 
@@ -158,5 +158,7 @@ En Kubernetes, se planificará la réplica de los servicios de la siguiente mane
 
 ## Diagrama de Arquitectura
 
-*Añade aquí un diagrama de la arquitectura para ilustrar las relaciones entre el frontend, backend y base de datos, tanto en local como en la nube.*
+El diagrama de arquitectura muestra la relación entre los diferentes componentes del sistema y cómo interactúan entre sí.
+
+![Diagrama](image.png)
 
