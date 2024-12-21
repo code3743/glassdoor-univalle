@@ -1,10 +1,6 @@
-FROM debian:bookworm
+FROM node:20.16
 
-
-RUN apt-get update && apt-get install -y curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-RUN nvm install 22
-
+RUN apt update && apt install -y iputils-ping curl
 
 WORKDIR /app
 COPY . /app
