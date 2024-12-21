@@ -1,4 +1,4 @@
-FROM node:20.16 as runtime
+FROM node:22.12 AS runtime
 
 
 WORKDIR /app

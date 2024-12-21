@@ -1,4 +1,4 @@
-FROM node:20.16
+FROM node:22.12
 
 RUN apt update && apt install -y iputils-ping curl
 

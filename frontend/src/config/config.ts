@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.API_BASE_URL;
+export const API_BASE_URL = process.env.API_BASE_URL;
 
 const ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/api/login`,
