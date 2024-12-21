@@ -1,7 +1,8 @@
+\c postgres;
 DROP DATABASE IF EXISTS glassdoor_db;
 CREATE DATABASE glassdoor_db;
 
-\c glassdoor_db; 
+\c glassdoor_db;
 CREATE TABLE IF NOT EXISTS teachers (
   id VARCHAR(14) PRIMARY KEY,
   name TEXT NOT NULL
