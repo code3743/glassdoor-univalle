@@ -12,6 +12,11 @@ services:
       - ./db/init/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     networks:
       - backend_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -25,7 +30,8 @@ services:
     working_dir: /app
     volumes: []
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       PORT: 5000
       JWT_SECRET: ProyectoFinalInfraestructuraG50
