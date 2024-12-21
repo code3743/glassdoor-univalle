@@ -1,4 +1,10 @@
 #!/bin/bash
+minikube start
+if [ $? -ne 0 ]; then
+  echo "Error iniciando Minikube"
+  exit 1
+fi
+
 
 kubectl create configmap init-db-sql --from-file=./db/init/init-db.sql
 if [ $? -ne 0 ]; then
@@ -6,11 +12,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-minikube start
-if [ $? -ne 0 ]; then
-  echo "Error iniciando Minikube"
-  exit 1
-fi
+
 
 kubectl apply -f backend-deployment.yaml
 if [ $? -ne 0 ]; then
