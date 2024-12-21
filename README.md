@@ -330,6 +330,13 @@ Para acceder al frontend, se puede utilizar el siguiente comando:
 minikube service frontend
 ```
 
+Para automatizar el proceso de despliegue, se puede utilizar el script `deploy.sh`:
+
+```bash
+sh deploy.sh
+```
+
+
 ---
 
 ## Seguridad
