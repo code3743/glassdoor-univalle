@@ -30,15 +30,15 @@ export async function GET(context: APIContext): Promise<Response> {
             "Authorization": `Bearer ${token}`
         }});
     const data = await response.json();
-    await fetch(ENDPOINTS.CURRENT_TEACHERS,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+    if (response.ok){     
+        await fetch(ENDPOINTS.CURRENT_TEACHERS,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
             }
-        }
-    );
-    if (response.ok){        
+        );   
         return new Response(JSON.stringify(data), {
             status: 200,
             headers: {
