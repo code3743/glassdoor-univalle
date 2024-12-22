@@ -70,7 +70,7 @@ if (average_rating > 3.7) {
           <img transition:name={`img-${id}`} class="rounded w-72 h-auto" src={`/${ratingImagePath}`} alt="Imagen que representa un estado respecto a la calificación" />
           
           <span class="text-xs">⭐️ {parseAverageRating } ({total_ratings} reseñas)</span>
-
+        
           <form id="rating-form" class="flex flex-col gap-4 w-full max-w-sm" action="/api/evaluation" method="POST">
             <input 
                 type="hidden" 
@@ -189,7 +189,6 @@ if (average_rating > 3.7) {
             }); 
   
             const data = await response.json();
-            console.log(data);
             hideSpinner();
             if(response.ok){
               return await navigate('/evaluation');

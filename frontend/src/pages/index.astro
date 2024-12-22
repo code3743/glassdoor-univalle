@@ -9,19 +9,14 @@ interface Rating {
 
 import Introduction from "../components/Introduction.astro";
 import ItemRating from "../components/ItemRating.astro";
+import Logo from "../components/Logo.astro";
 import Searcher from "../components/Searcher.astro";
 import UserInfo from "../components/UserInfo.astro";
 import ENDPOINTS from "../config/config";
 import Layout from "../layouts/Layout.astro";
-let data: any;
-try {
-  console.log("Fetching data...");
-  console.log(ENDPOINTS.RATINGS);
-  const response = await fetch(ENDPOINTS.RATINGS);
-  data = await response.json();
-} catch (error) {
-  console.error("Error:", error);
-}
+
+const response = await fetch(ENDPOINTS.RATINGS);
+const data = await response.json();
 const ratings: Rating[] = data?.data || [];
 ---
 
@@ -30,10 +25,7 @@ const ratings: Rating[] = data?.data || [];
   description="Glassdor Univalle es una plataforma de reseñas de profesores de la Universidad del Valle"
 >
   <main>
-    <h1 class="text-center text-6xl font-extrabold mb-24">
-      Glassdoor
-      <span class="block">Univalle</span>
-    </h1>
+    <Logo />
     <UserInfo />
     <Searcher />
   </main>

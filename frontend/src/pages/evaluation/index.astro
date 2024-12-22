@@ -5,66 +5,64 @@ import Searcher from "../../components/Searcher.astro";
 import ENDPOINTS from "../../config/config";
 import Layout from "../../layouts/Layout.astro";
 
-
-
 const token = Astro.locals.token;
 const user = Astro.locals.user;
 
 if (!token || !user) {
-    return Astro.redirect('/login');
+  return Astro.redirect("/login");
 }
 
 if (user && !user.name) {
-    return Astro.redirect('/profile');
+  return Astro.redirect("/profile");
 }
 
-
 const response = await fetch(ENDPOINTS.EVALUATE_TEACHER, {
-    headers: {
-        'Authorization': `Bearer ${token}`
-    }
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
 });
 const data = await response.json();
 const teachersHistory = data.teachers || [];
 
-teachersHistory.sort((a:any, b:any) => {
-    if (a.rated < b.rated) {
-        return -1;
-    }
-    if (a.rated > b.rated) {
-        return 1;
-    }
-    return 0;
+const teachers = teachersHistory.filter((teacher: any) => {
+  return !teacher.rated;
 });
 ---
 
-<Layout title="Evaluación de profesores" description="Evaluación de profesores de la Universidad del Valle">
-    <main>
-        <a href="/">
-        <h1 class="text-center text-6xl font-extrabold mb-24"> Glassdoor
-            <span class="block">Univalle</span>
-        </h1>
+<Layout
+  title="Evaluación de profesores"
+  description="Evaluación de profesores de la Universidad del Valle"
+>
+  <main>
+    <a href="/">
+      <h1 class="text-center text-6xl font-extrabold mb-24">
+        Glassdoor
+        <span class="block">Univalle</span>
+      </h1>
     </a>
-		<Searcher/>
-    </main>
-    <section aria-label="Reseñas recientes" class="mt-24">
-		<div class="px-4 mx-auto max-w-screen-xl">
-      {!teachersHistory.length ? <Introduction description="Parece que no hemos podido encontrar profesores"/> :
-			
-            
-            <div class="grid gap-6 md:grid-cols-2">
-                {
-					
-					teachersHistory.map((teacher:any) => {
-						
-						const { id, name, subject, rated} = teacher;
-						return  <ItemTeacher id={id}  name={name} subject={subject}  rated={rated}/>  
-					})
-				}
-			</div>
+    <Searcher />
+  </main>
+  <section aria-label="Reseñas recientes" class="mt-24">
+    <div class="px-4 mx-auto max-w-screen-xl">
+      {
+        !teachers.length ? (
+          <Introduction description="No hay profesores para evaluar" />
+        ) : (
+          <div class="grid gap-6 md:grid-cols-2">
+            {teachers.map((teacher: any) => {
+              const { id, name, subject, rated } = teacher;
+              return (
+                <ItemTeacher
+                  id={id}
+                  name={name}
+                  subject={subject}
+                  rated={rated}
+                />
+              );
+            })}
+          </div>
+        )
       }
-		</div>
-	</section>
-
-
+    </div>
+  </section>
 </Layout>

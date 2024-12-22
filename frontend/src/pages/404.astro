@@ -1,23 +1,25 @@
 ---
 import Introduction from "../components/Introduction.astro";
+import Logo from "../components/Logo.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Glassdor Univalle" description="Glassdor Univalle es una plataforma de reseñas de profesores de la Universidad del Valle">
-	<main class="flex flex-col items-center justify-center">
-        <a href="/">
-            <h1 class="text-center text-6xl font-extrabold mb-24"> Glassdoor
-                <span class="block">Univalle</span>
-            </h1>
-        </a>
-
-		<section class="text-center mx-auto ">
-            <h2 class="text-4xl font-bold mb-4">404 - Página no encontrada</h2>
-            <div class="py-5">
-                <Introduction  description="Oops... Parece que te perdiste. 🚧 No hay nada por aquí, ¿por qué no vuelves al inicio? 🌟"/>
-            </div>
-        <a href="/" class="text-[#EE322F] hover:underline mt-10">Volver al inicio</a>
+<Layout
+  title="Glassdor Univalle"
+  description="Glassdor Univalle es una plataforma de reseñas de profesores de la Universidad del Valle"
+>
+  <main class="flex flex-col items-center justify-center">
+    <Logo />
+    <section class="text-center mx-auto">
+      <h2 class="text-4xl font-bold mb-4">404 - Página no encontrada</h2>
+      <div class="py-5">
+        <Introduction
+          description="Oops... Parece que te perdiste. 🚧 No hay nada por aquí, ¿por qué no vuelves al inicio? 🌟"
+        />
+      </div>
+      <a href="/" class="text-[#EE322F] hover:underline mt-10"
+        >Volver al inicio</a
+      >
     </section>
-    
-    </main>
+  </main>
 </Layout>

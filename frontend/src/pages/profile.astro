@@ -68,9 +68,7 @@ if (user?.name) {
   >
     Establece un alias para tu cuenta de Glassdoor Univalle.
   </p>
-  <p id="error" class="text-center text-red-500 font-semibold my-3">
-    
-  </p>
+  <p id="error" class="text-center text-red-500 font-semibold my-3"></p>
 </Layout>
 
 <style>
@@ -98,7 +96,7 @@ if (user?.name) {
 
 <script>
       import { navigate } from 'astro:transitions/client';
-import { Spinner } from 'spin.js';
+      import { Spinner } from 'spin.js';
 
       const overlay = document.getElementById('overlay')!;
       const target = document.getElementById('spinner')!;
@@ -138,23 +136,18 @@ import { Spinner } from 'spin.js';
             await getUser();
             return;
           }
-
-         
           error.textContent = data.message;
-
-          
       });
-
 
       async function getUser() {
           const response = await fetch('/api/user');
           const data = await response.json();
           if (response.ok) {
              if (data.name){
-              return navigate('/evaluation');
+              return await navigate('/evaluation');
              }
 
-             return navigate('/profile');
+             return await navigate('/profile');
           }
 
           error.textContent = data.message;
