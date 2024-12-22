@@ -385,7 +385,7 @@ El diagrama de arquitectura muestra la relación entre los diferentes componente
 ## Capturas de Pantalla
 
 Pagina de inicio 
-![index](/screenshot/image.png)
+![index](/screenshot/index.png)
 
 Pagina de login
 ![login](/screenshot/login.png)
