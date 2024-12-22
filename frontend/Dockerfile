@@ -2,7 +2,7 @@ FROM node:22.12 AS runtime
 
 
 WORKDIR /app
-COPY . /app
+COPY . .
 
 EXPOSE 3000
 
