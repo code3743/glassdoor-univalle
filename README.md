@@ -382,6 +382,17 @@ El diagrama de arquitectura muestra la relación entre los diferentes componente
 ![Arquitectura nube](/screenshot/cloud.png)
 
 
+---
+## Conclusiones
+
+El proyecto **Glassdoor Univalle** ha demostrado la viabilidad de utilizar diversas tecnologías para el desarrollo de una plataforma web escalable, tanto en entornos locales como en la nube, la implementación con **Docker Compose** en el entorno local permitió gestionar de manera sencilla los contenedores de los diferentes componentes (frontend, backend y base de datos), lo que facilitó la configuración y el despliegue rápido, sin embargo, **Docker Compose** presenta limitaciones en términos de escalabilidad y balanceo de carga, ya que no ofrece soluciones automáticas para estos aspectos, lo que requiere intervenciones manuales y el uso de herramientas adicionales, como balanceadores de carga externos.
+
+Por otro lado, el uso de **Kubernetes** proporcionó una solución más adecuada para gestionar la plataforma de manera dinámica, permitiendo una distribución eficiente de los servicios y facilitando la escalabilidad automática, Kubernetes también garantizó una mayor disponibilidad, ya que los servicios se distribuyen y gestionan de forma más flexible, sin la necesidad de configuraciones estáticas.
+
+Ahora bien, la elección entre **Docker Compose** y **Kubernetes** depende de diversos factores, como los objetivos específicos del proyecto, los requisitos de escalabilidad, la complejidad de la infraestructura, y la capacidad del equipo para gestionar y mantener la solución, ambas herramientas tienen su lugar dependiendo del contexto en el que se utilicen, no es una decisión definitiva o excluyente, y en muchos casos, pueden complementarse en diferentes etapas del ciclo de vida del proyecto.
+
+---
+
 ## Capturas de Pantalla
 
 Pagina de inicio 
