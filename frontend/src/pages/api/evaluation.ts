@@ -22,6 +22,19 @@ export async function POST(context: APIContext): Promise<Response> {
         }),
     });
 
+    const data = await response.json();
 
-   return response;
+    if (response.ok){
+        return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
+
+   return new Response(JSON.stringify(data), {
+         status: response.status
+   });
 }
