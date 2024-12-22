@@ -350,15 +350,24 @@ Una de las principales consideraciones de seguridad en este proyecto fue garanti
 
 ### Prueba de Estrés
 
-Para probar la escalabilidad y el rendimiento de la solución, se realizaron pruebas de estrés utilizando **Apache Benchmark**, una herramienta de línea de comandos para realizar solicitudes HTTP a un servidor y medir su rendimiento.
-
-#### Ejemplo con Apache Benchmark:
+Para probar la escalabilidad y el rendimiento de la solución, se realizaron pruebas de estrés con un script bash que solicita al frontend un número específico de solicitudes para simular una carga alta en el sistema, para ejecutar el script se puede utilizar el siguiente comando:
 
 ```bash
-ab -n 1000 -c 100 http://<minikube-ip>:<backend-service-port>/ruta-api
+sh stress-test.sh IP_FRONTEND PORT_FRONTEND
 ```
-- `-n 1000`: Número total de solicitudes a enviar.
-- `-c 100`: Número de solicitudes concurrentes.
+### Resultados de las Pruebas de Estrés
+
+Los resultados de las pruebas de estrés mostraron que la solución en la nube es capaz de manejar una carga alta de solicitudes sin problemas, gracias a la escalabilidad y la distribución de los servicios en Kubernetes, se logró mantener un tiempo de respuesta bajo y una alta disponibilidad del sistema, la carga de trabajo se distribuyó entre las réplicas del backend y se pudo escalar horizontalmente para manejar la demanda.
+
+**Captura de pantalla de los resultados de las pruebas de estrés**:
+
+![Consumo general](/screenshot/1.png)
+
+
+En las metricas se puede observar que el consumo de CPU y memoria de los pods del backend aumenta con el número de solicitudes, pero se mantiene dentro de los límites aceptables, lo que indica que el sistema es capaz de manejar la carga sin problemas, además, el balanceo de carga se puede observar en la distribución de las solicitudes entre las diferentes réplicas del backend, comenzando un picos de consumo de CPU, pero disminuyendo a medida que se distribuye la carga entre las réplicas.
+
+![Metricas](/screenshot/2.png)
+
 
 ---
 
@@ -367,8 +376,31 @@ ab -n 1000 -c 100 http://<minikube-ip>:<backend-service-port>/ruta-api
 El diagrama de arquitectura muestra la relación entre los diferentes componentes del sistema y cómo interactúan entre sí.
 
 **Arquitectura Local**:
-![Arquitectura local](local.png)
+![Arquitectura local](/screenshot/local.png)
 
 **Arquitectura en la Nube**:
-![Arquitectura nube](cloud.png)
+![Arquitectura nube](/screenshot/cloud.png)
 
+
+## Capturas de Pantalla
+
+Pagina de inicio 
+![index](/screenshot/image.png)
+
+Pagina de login
+![login](/screenshot/login.png)
+
+Al iniciar sesión por primera vez, se le pedirá al usuario que establezca un alias para su cuenta.
+![alias](/screenshot/alias.png)
+
+Pantalla donde se muestran los profesores habilitados para ser calificados.
+![evaluation](/screenshot/evaluation.png)
+
+Cuando ya se han calificado a los profesores
+![done](/screenshot/done.png)
+
+En la pagina de inico se mostraran las calificaciones más recientes
+![recent](/screenshot/recent.png)!
+
+Detalles de las calificaciones
+![details](/screenshot/details.png)
