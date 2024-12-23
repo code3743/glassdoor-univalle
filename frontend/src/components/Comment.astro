@@ -1,0 +1,24 @@
+---
+interface Props {
+    ratings: {
+        rating: number;
+        comment: string;
+        created_at: string;
+    }[];
+}
+
+const { ratings } = Astro.props;
+
+---
+
+<section class="flex items-center gap-4 w-full">
+    {
+        ratings.map(({ rating, comment, created_at}, index) => (
+            <article class="bg-gray-800 p-4 rounded w-full">
+                <p class="text-gray-300 text-sm mb-2">Calificación: {rating.toFixed()}</p>
+                <p class="text-gray-300 text-sm">{comment}</p>
+                <p class="text-gray-300 text-sm">{created_at}</p>
+            </article>
+        ))
+    }
+</section>

@@ -16,6 +16,7 @@ interface Rating {
 
 import ENDPOINTS from "../../config/config";
 import Layout from "../../layouts/Layout.astro";
+import Comment from "../../components/Comment.astro";
 
 
 const token = Astro.locals.token;
@@ -109,19 +110,10 @@ if (average_rating > 3.7) {
         </form>
         </aside>
     
-        <main class="max-w-3xl">
-          <h1 transition:name={`title-${id}`} class="text-4xl font-bold mb-4">{teacher_name}</h1>
-          <p class="text-[#EE322F] text-lg font-medium mb-4">{subject_name}</p>
-        <section class="flex items-center gap-4">
-            {
-                ratings.map(({ rating, comment, created_at}, index) => (
-                    <article class="bg-gray-800 p-4 rounded">
-                        <p class="text-gray-300 text-sm mb-2">Calificación: {rating.toFixed()}</p>
-                        <p class="text-gray-300 text-sm">{comment}</p>
-                        <p class="text-gray-300 text-sm">{created_at}</p>
-                    </article>
-                ))
-            }
+        <main class="max-w-3xl w-full">
+            <h1 transition:name={`title-${id}`} class="text-4xl font-bold mb-4">{teacher_name}</h1>
+            <p class="text-[#EE322F] text-lg font-medium mb-4">{subject_name}</p>
+            <Comment ratings={ratings} />
         </main>
       </div>
     

@@ -17,12 +17,12 @@ const {title, description} = Astro.props;
 		<meta name="description" content={description} />
 		<ClientRouter />
 		<title>{title}</title>
-		<link rel="stylesheet" href="node_modules/spin.js/spin.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.2/spin.min.css" integrity="sha512-ssYEuK9Epo/48VIlBWTFosf1izrgGZqEMELJP+L7Clh0nvaOSTg87dM+Z8L+KKjrPdMbMvKYOOnzBOkNMhWFsg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	</head>
 	<body>
-		<div>
+		<main>
 			<slot />
-		</div>
+		</main>
 		
 	</body>
 </html>
@@ -52,7 +52,7 @@ const {title, description} = Astro.props;
 		@apply grid place-content-center p-20;
 	}
 
-	body > div {
+	body > main {
 		@apply container;
 	}
 </style>

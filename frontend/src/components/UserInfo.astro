@@ -1,4 +1,6 @@
 ---
+import Logout from "./Logout.astro";
+
 const token = Astro.locals.token;
 const user = Astro.locals.user;
 ---
@@ -14,12 +16,7 @@ const user = Astro.locals.user;
         >
           Evaluar profesor
         </a>
-        <a 
-          href="/api/auth"
-          class="px-4 py-2 bg-white text-[#EE322F] rounded-md shadow-md hover:bg-[#d52b29] transition duration-300"
-        >
-          Cerrar sesión
-        </a>
+        <Logout />
       </div>
     
   ) : (
@@ -29,6 +26,5 @@ const user = Astro.locals.user;
     >
       Iniciar sesión
     </a>
-    <a id="logout"></a>
   )}
 </div>
