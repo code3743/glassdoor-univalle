@@ -15,7 +15,7 @@ app.use(tokenMiddleware)
 app.use('/api', router);
 app.use(cors())
 app.get('*', (req, res) => { 
-    res.status(404).json({ message: 'Not found' });
+    res.status(200).send('Welcome to the API');
 });
 
 
