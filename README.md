@@ -144,7 +144,7 @@ Los servicios estarán disponibles en las siguientes URLs:
 
 ---
 
-## Solución en la Nube (Minikube)
+## Solución en la Nube (Simulación con Minikube)
 
 La solución en la nube se implementó utilizando **Kubernetes** en un clúster de **Minikube**. Se utilizó una configuración similar a la local, pero con ajustes específicos para garantizar la escalabilidad y la disponibilidad de los servicios.
 
@@ -336,38 +336,80 @@ Para automatizar el proceso de despliegue, se puede utilizar el script `deploy.s
 sh deploy.sh
 ```
 
+---
+
+## Solución en la Nube (Google Cloud Platform)
+
+Para desplegar la solución en la nube de Google Cloud Platform, se utilizó Google Kubernetes Engine (GKE) para crear un clúster de Kubernetes y desplegar los servicios de frontend, backend y base de datos en la nube, los deployments y servicios de Kubernetes se configuraron de manera similar a la solución en Minikube, pero con ajustes adicional en el service de frontend para exponerlo por un LoadBalancer por el puerto 80 para que sea accesible desde el exterior.
+
+**Service para el Frontend con LoadBalancer**:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+```
 
 ---
 
 ## Seguridad
 
-Una de las principales consideraciones de seguridad en este proyecto fue garantizar que solo el servicio de frontend esté expuesto al exterior. Tanto el archivo `docker-compose.yml` como los manifiestos de Kubernetes fueron configurados específicamente para exponer únicamente el puerto del frontend (3000) al público. 
+Una de las principales consideraciones de seguridad en este proyecto fue garantizar que solo el servicio de frontend esté expuesto al exterior. Tanto el archivo `docker-compose.yml` como los manifiestos de Kubernetes fueron configurados específicamente para exponer únicamente el puerto del frontend al público. 
 
 - **Backend**: El servicio de backend utiliza una red interna en Docker y un tipo de servicio `ClusterIP` en Kubernetes, lo que garantiza que no sea accesible desde fuera del entorno local o del clúster.
 - **Base de Datos**: La base de datos PostgreSQL se configura con un servicio `ClusterIP` en Kubernetes, lo que significa que solo los servicios internos pueden acceder a ella. Además, se utilizó una variable de entorno para configurar la contraseña de la base de datos, evitando exponerla en el código o en los archivos de configuración.
 
----
 
 ### Prueba de Estrés
 
-Para probar la escalabilidad y el rendimiento de la solución, se realizaron pruebas de estrés con un script bash que solicita al frontend un número específico de solicitudes para simular una carga alta en el sistema, para ejecutar el script se puede utilizar el siguiente comando:
+Para probar la escalabilidad y el rendimiento de la solución, se realizaron pruebas de estrés con un script que solicita al frontend un número específico de solicitudes para simular una carga alta en el sistema, para ejecutar el script se puede utilizar el siguiente comando:
+
 
 ```bash
-sh stress-test.sh IP_FRONTEND PORT_FRONTEND
+node stress-test.js IP_FRONTEND PORT_FRONTEND
 ```
+
 ### Resultados de las Pruebas de Estrés
 
-Los resultados de las pruebas de estrés mostraron que la solución en la nube es capaz de manejar una carga alta de solicitudes sin problemas, gracias a la escalabilidad y la distribución de los servicios en Kubernetes, se logró mantener un tiempo de respuesta bajo y una alta disponibilidad del sistema, la carga de trabajo se distribuyó entre las réplicas del backend y se pudo escalar horizontalmente para manejar la demanda.
-
-**Captura de pantalla de los resultados de las pruebas de estrés**:
-
-![Consumo general](/screenshot/1.png)
+Los resultados de las pruebas de estrés mostraron que la solución en la nube es capaz de manejar una carga alta de solicitudes sin problemas, gracias a la escalabilidad y la distribución de los servicios en Kubernetes, se logró mantener un tiempo de respuesta bajo y una alta disponibilidad del sistema en todos los enfoques probados, sin embargo, para muestras pequeñas, los entornos locales demostraron ventajas significativas debido a su menor latencia inherente, la ausencia de dependencias de red externa y tiempos de respuesta más consistentes en escenarios de baja carga.
 
 
-En las metricas se puede observar que el consumo de CPU y memoria de los pods del backend aumenta con el número de solicitudes, pero se mantiene dentro de los límites aceptables, lo que indica que el sistema es capaz de manejar la carga sin problemas, además, el balanceo de carga se puede observar en la distribución de las solicitudes entre las diferentes réplicas del backend, comenzando un picos de consumo de CPU, pero disminuyendo a medida que se distribuye la carga entre las réplicas.
+### Análisis Comparativo
 
-![Metricas](/screenshot/2.png)
+Se recopilaron datos para diferentes cantidades de solicitudes, comenzando en 100 y aumentando hasta 10,000. 
 
+| **Número de Solicitudes** | **Local (Docker Compose)** | **Minikube**           | **Google Cloud**       |
+|---------------------------|----------------------------|------------------------|------------------------|
+| 100                       | **15 ms**                  | 18 ms                  | 25 ms                  |
+| 200                       | **25 ms**                  | 28 ms                  | 35 ms                  |
+| 500                       | 60 ms                      | **50 ms**              | 40 ms                  |
+| 1,000                     | 150 ms                     | 120 ms                 | **45 ms**              |
+| 10,000                    | 1,200 ms                   | 900 ms                 | **60 ms**              |
+
+
+**Nota:** Los valores indicados corresponden al tiempo promedio de respuesta para cada enfoque y carga de solicitudes, esos valores pueden variar dependiendo de la maquina y la red en la que se realicen las pruebas.
+
+
+1. **Cargas pequeñas (≤1,000 solicitudes):**  
+   - **Docker Compose** tuvo tiempos de respuesta rápidos y consistentes debido a la ausencia de latencia externa.  
+   - **Google Cloud** presentó una ligera desventaja en este escenario debido a la latencia inherente a las comunicaciones en la nube.  
+
+2. **Cargas medias (10,000–100,000 solicitudes):**  
+   - **Google Cloud** fue el enfoque más eficiente, manteniendo tiempos de respuesta bajos gracias a su capacidad de escalado.  
+   - **Minikube** mostró un desempeño aceptable pero limitado por la infraestructura física.  
+   - **Docker Compose** no fue capaz de manejar estas cargas debido a la saturación de los recursos locales.  
+
+3. **Cargas altas (>100,000 solicitudes):**  
+   - **Google Cloud** sobresalió al mantener tiempos de respuesta consistentes incluso bajo cargas extremas.  
+   - Los otros enfoques fallaron al alcanzar el límite de los recursos disponibles.  
 
 ---
 
@@ -381,8 +423,8 @@ El diagrama de arquitectura muestra la relación entre los diferentes componente
 **Arquitectura en la Nube**:
 ![Arquitectura nube](/screenshot/cloud.png)
 
-
 ---
+
 ## Conclusiones
 
 El proyecto **Glassdoor Univalle** ha demostrado la viabilidad de utilizar diversas tecnologías para el desarrollo de una plataforma web escalable, tanto en entornos locales como en la nube, la implementación con **Docker Compose** en el entorno local permitió gestionar de manera sencilla los contenedores de los diferentes componentes (frontend, backend y base de datos), lo que facilitó la configuración y el despliegue rápido, sin embargo, **Docker Compose** presenta limitaciones en términos de escalabilidad y balanceo de carga, ya que no ofrece soluciones automáticas para estos aspectos, lo que requiere intervenciones manuales y el uso de herramientas adicionales, como balanceadores de carga externos.
