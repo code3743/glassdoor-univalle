@@ -1,0 +1,16 @@
+<button
+    type="button"
+    id="cancel"
+    class="rounded-md w-full text-[#EE322F] font-semibold text-sm px-6 py-3 max-w-md mx-auto font-[sans-serif] transition my-6"
+    >
+    Salir
+</button>
+
+<script>
+    import { navigate } from "astro:transitions/client";
+    document.getElementById('cancel')!.addEventListener('click', async () => {
+        await fetch('/api/auth');
+        await navigate('/');
+    });
+
+</script>

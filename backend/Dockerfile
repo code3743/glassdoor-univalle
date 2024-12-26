@@ -1,6 +1,5 @@
-FROM node:22.12
+FROM node:22.12.0-alpine
 
-RUN apt update && apt install -y iputils-ping curl
 
 WORKDIR /app
 COPY . /app

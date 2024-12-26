@@ -1,8 +1,8 @@
-FROM node:22.12 AS runtime
+FROM node:22.12.0-alpine AS runtime
 
 
 WORKDIR /app
-COPY . /app
+COPY . .
 
 EXPOSE 3000
 

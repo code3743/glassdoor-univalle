@@ -24,12 +24,16 @@ export async function POST(context: APIContext): Promise<Response> {
             headers: {
                 "Content-Type": "application/json",
                 "Set-Cookie": `token=${data.token}; HttpOnly; Path=/; SameSite=Strict;`,
+                "Cache-Control": "no-store",
             },
         });
     }
 
     return new Response(JSON.stringify(data), {
-        status: response.status
+        status: response.status, 
+        headers: {
+            "Cache-Control": "no-store",
+        }
     });
 }
 
@@ -59,6 +63,10 @@ export async function GET(context: APIContext): Promise<Response> {
 
         headers.append(
             'Location', '/'
+        )
+
+        headers.append(
+            'Cache-Control', 'no-store'
         )
     return new Response(JSON.stringify({message: "Logged out"}), {
         status: 303,

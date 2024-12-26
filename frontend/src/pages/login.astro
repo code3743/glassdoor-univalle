@@ -70,30 +70,6 @@ import Layout from "../layouts/Layout.astro";
   </div>
 </Layout>
 
-<style>
-  #overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 0.5s ease,
-      visibility 0.5s ease;
-  }
-  #overlay.active {
-    opacity: 1;
-    visibility: visible;
-  }
-</style>
-
 <script>
   import { navigate } from "astro:transitions/client";
   import { Spinner } from "spin.js";
